@@ -23,39 +23,51 @@
   (spec/keys
     :req-un [::some-object ::other-object]))
 
+(deftest about-validator-for
+  (testing "when there are no problems"
+    (let [target {:some-string "correct"
+                  :some-number 50}
+          valid? (validator-for ::some-object)]
+      (is (true? (valid? target)))))
+
+  (testing "when there are problems"
+    (let [target {:wrong-string "nope"}
+          valid? (validator-for ::some-object)]
+      (is (false? (valid? target))))))
+
 (deftest about-problem-calculator-for
   (testing "when there are no problems"
-    (let [subject {:some-string "correct"
+    (let [target {:some-string "correct"
                    :some-number 50}
           calculate-problems
           (problem-calculator-for ::some-object :some-object)]
-      (is (= (calculate-problems subject) []))))
+      (is (= (calculate-problems target) []))))
 
   (testing "when one top level field is invalid"
-    (let [subject {:some-string "correct"
+    (let [target {:some-string "correct"
                    :some-number "oops"}
           calculate-problems
           (problem-calculator-for ::some-object :some-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :some-object
               :field   [:some-number]
               :type    :invalid}]))))
 
   (testing "when one top level field is missing"
-    (let [subject {:some-string "correct"}
+    (let [target {:some-string "correct"}
           calculate-problems
           (problem-calculator-for ::some-object :some-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :some-object
               :field   [:some-number]
               :type    :missing}]))))
 
   (testing "when many top level fields are invalid"
-    (let [subject {:some-string 10
+    (let [target {:some-string 10
                    :some-number "oops"}
           calculate-problems
           (problem-calculator-for ::some-object :some-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :some-object
               :field   [:some-string]
               :type    :invalid}
@@ -64,10 +76,10 @@
               :type    :invalid}]))))
 
   (testing "when many top level fields are missing"
-    (let [subject {}
+    (let [target {}
           calculate-problems
           (problem-calculator-for ::some-object :some-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :some-object
               :field   [:some-string]
               :type    :missing}
@@ -76,34 +88,34 @@
               :type    :missing}]))))
 
   (testing "when one nested field is invalid"
-    (let [subject {:some-object  {:some-string 10
+    (let [target {:some-object  {:some-string 10
                                   :some-number 10}
                    :other-object {:other-string "correct"
                                   :other-number 20}}
           calculate-problems
           (problem-calculator-for ::higher-order-object :higher-order-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :higher-order-object
               :field   [:some-object :some-string]
               :type    :invalid}]))))
 
   (testing "when one nested field is missing"
-    (let [subject {:some-object  {:some-number 10}
+    (let [target {:some-object  {:some-number 10}
                    :other-object {:other-string "correct"
                                   :other-number 20}}
           calculate-problems
           (problem-calculator-for ::higher-order-object :higher-order-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :higher-order-object
               :field   [:some-object :some-string]
               :type    :missing}]))))
 
   (testing "when many nested fields are missing"
-    (let [subject {:some-object  {:some-number 10}
+    (let [target {:some-object  {:some-number 10}
                    :other-object {:other-string "correct"}}
           calculate-problems
           (problem-calculator-for ::higher-order-object :higher-order-object)]
-      (is (= (calculate-problems subject)
+      (is (= (calculate-problems target)
             [{:subject :higher-order-object
               :field   [:some-object :some-string]
               :type    :missing}

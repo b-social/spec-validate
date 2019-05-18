@@ -2,10 +2,6 @@
   (:require
     [clojure.spec.alpha :as spec]))
 
-(defprotocol Validator
-  (valid? [_ m])
-  (problems-for [_ m]))
-
 (defn predicate-details [problem-details]
   (vec (get (vec problem-details) 2)))
 (defn pred-fn-symbol [problem-details]
@@ -13,9 +9,13 @@
 (defn pred-fn-field [problem-details]
   (get (predicate-details problem-details) 2))
 
+(defn validator-for [spec]
+  (fn [validation-target]
+    (spec/valid? spec validation-target)))
+
 (defn problem-calculator-for [spec validation-subject]
-  (fn [validate-data]
-    (let [context (spec/explain-data spec validate-data)]
+  (fn [validate-target]
+    (let [context (spec/explain-data spec validate-target)]
       (reduce
         (fn [accumulator problem]
           (let [pred (:pred problem)
