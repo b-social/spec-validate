@@ -16,18 +16,13 @@
   :repl-options {:init-ns spec-validate.core}
   :deploy-repositories {"releases" {:url   "https://repo.clojars.org"
                                     :creds :gpg}}
-  :aliases {"update-readme-version"
-            ["shell"
-             "sed"
-             "-i"
-             "s/\\\\[spec-validate \"[0-9.]*\"\\\\]/[spec-validate \"${:version}\"]/"
-             "README.md"]}
   :release-tasks [["shell" "git" "diff" "--exit-code"]
-                  ["change" "version" "leiningen.release/bump-version"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["changelog" "release"]
-                  ["update-readme-version"]
                   ["vcs" "commit"]
                   ["vcs" "tag"]
                   ["deploy"]
+                  ["change" "version" "leiningen.release/bump-version"]
+                  ["vcs" "commit"]
+                  ["vcs" "tag"]
                   ["vcs" "push"]])
