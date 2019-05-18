@@ -4,7 +4,9 @@ A Clojure library designed to ... well, that part is up to you.
 
 ## Usage
 
-FIXME
+```clj
+[spec-validate "0.0.0"]
+```
 
 ## License
 
