@@ -17,27 +17,33 @@
   (fn [validation-target]
     (spec/valid? spec validation-target)))
 
-(defn problem-calculator-for [spec validation-subject]
-  (fn [validate-target]
-    (let [context (spec/explain-data spec validate-target)]
-      (reduce
-        (fn [accumulator problem]
-          (let [pred (:pred problem)
-                is-missing (and
-                             (seq? pred)
-                             (= 'clojure.core/contains? (pred-fn-symbol pred)))
-                [path-to-field type requirement]
-                (if is-missing
-                  [(conj (:in problem) (pred-fn-field pred))
-                   :missing
-                   :must-be-present]
-                  [(:in problem)
-                   :invalid
-                   (pred-requirement pred)])]
-            (conj accumulator
-              {:type         type
-               :subject      validation-subject
-               :field        path-to-field
-               :requirements [requirement]})))
-        []
-        (::spec/problems context)))))
+(defn problem-calculator-for
+  ([spec & {:as options}]
+   (let [{:keys [validation-subject
+                 problem-transformer]
+          :or   {validation-subject  (keyword (name spec))
+                 problem-transformer identity}} options]
+     (fn [validation-target]
+       (let [context (spec/explain-data spec validation-target)]
+         (reduce
+           (fn [accumulator problem]
+             (let [pred (:pred problem)
+                   is-missing (and
+                                (seq? pred)
+                                (= 'clojure.core/contains? (pred-fn-symbol pred)))
+                   [path-to-field type requirement]
+                   (if is-missing
+                     [(conj (:in problem) (pred-fn-field pred))
+                      :missing
+                      :must-be-present]
+                     [(:in problem)
+                      :invalid
+                      (pred-requirement pred)])]
+               (conj accumulator
+                 (problem-transformer
+                   {:type         type
+                    :subject      validation-subject
+                    :field        path-to-field
+                    :requirements [requirement]}))))
+           []
+           (::spec/problems context)))))))

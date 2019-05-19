@@ -65,7 +65,7 @@
                   :some-number      50
                   :some-large-value 10}
           calculate-problems
-          (problem-calculator-for ::some-object :some-object)]
+          (problem-calculator-for ::some-object)]
       (is (= (calculate-problems target) []))))
 
   (testing "when one top level field is invalid"
@@ -73,7 +73,7 @@
                   :some-number      "oops"
                   :some-large-value 10}
           calculate-problems
-          (problem-calculator-for ::some-object :some-object)]
+          (problem-calculator-for ::some-object)]
       (is (= (calculate-problems target)
             [{:subject      :some-object
               :field        [:some-number]
@@ -83,18 +83,18 @@
   (testing "when a top level field is specified with spec/and and is invalid"
     (let [target {:some-complex-thing "abc"}
           calculate-problems
-          (problem-calculator-for ::some-complex-object :some-complex-object)]
+          (problem-calculator-for ::some-complex-object)]
       (is (= (calculate-problems target)
-            [{:subject :some-complex-object
-              :field [:some-complex-thing]
-              :type :invalid
+            [{:subject      :some-complex-object
+              :field        [:some-complex-thing]
+              :type         :invalid
               :requirements [:must-have-length-greater-than-5]}]))))
 
   (testing "when one top level field is missing"
     (let [target {:some-string      "correct"
                   :some-large-value 10}
           calculate-problems
-          (problem-calculator-for ::some-object :some-object)]
+          (problem-calculator-for ::some-object)]
       (is (= (calculate-problems target)
             [{:subject      :some-object
               :field        [:some-number]
@@ -106,7 +106,7 @@
                   :some-number      "oops"
                   :some-large-value 10}
           calculate-problems
-          (problem-calculator-for ::some-object :some-object)]
+          (problem-calculator-for ::some-object)]
       (is (= (calculate-problems target)
             [{:subject      :some-object
               :field        [:some-string]
@@ -120,7 +120,7 @@
   (testing "when many top level fields are missing"
     (let [target {:some-large-value 10}
           calculate-problems
-          (problem-calculator-for ::some-object :some-object)]
+          (problem-calculator-for ::some-object)]
       (is (= (calculate-problems target)
             [{:subject      :some-object
               :field        [:some-string]
@@ -138,7 +138,7 @@
                   :other-object {:other-string "correct"
                                  :other-number 20}}
           calculate-problems
-          (problem-calculator-for ::higher-order-object :higher-order-object)]
+          (problem-calculator-for ::higher-order-object)]
       (is (= (calculate-problems target)
             [{:subject      :higher-order-object
               :field        [:some-object :some-string]
@@ -151,7 +151,7 @@
                   :other-object {:other-string "correct"
                                  :other-number 20}}
           calculate-problems
-          (problem-calculator-for ::higher-order-object :higher-order-object)]
+          (problem-calculator-for ::higher-order-object)]
       (is (= (calculate-problems target)
             [{:subject      :higher-order-object
               :field        [:some-object :some-string]
@@ -165,7 +165,7 @@
                   :other-object {:other-string 10
                                  :other-number 10}}
           calculate-problems
-          (problem-calculator-for ::higher-order-object :higher-order-object)]
+          (problem-calculator-for ::higher-order-object)]
       (is (= (calculate-problems target)
             [{:subject      :higher-order-object
               :field        [:some-object :some-number]
@@ -181,7 +181,7 @@
                                  :some-large-value 10}
                   :other-object {:other-string "correct"}}
           calculate-problems
-          (problem-calculator-for ::higher-order-object :higher-order-object)]
+          (problem-calculator-for ::higher-order-object)]
       (is (= (calculate-problems target)
             [{:subject      :higher-order-object
               :field        [:some-object :some-string]
@@ -190,4 +190,36 @@
              {:subject      :higher-order-object
               :field        [:other-object :other-number]
               :type         :missing
-              :requirements [:must-be-present]}])))))
+              :requirements [:must-be-present]}]))))
+
+  (testing "allows validation subject to be overridden"
+    (let [target {:some-string      "correct"
+                  :some-number      "oops"
+                  :some-large-value 10}
+          calculate-problems
+          (problem-calculator-for ::some-object
+            :validation-subject :the-object)]
+      (is (= (calculate-problems target)
+            [{:subject      :the-object
+              :field        [:some-number]
+              :type         :invalid
+              :requirements [:must-be-a-number]}]))))
+
+  (testing "allows a problem transformer to be provided"
+    (let [target {:some-string      "correct"
+                  :some-number      "oops"
+                  :some-large-value 10}
+          calculate-problems
+          (problem-calculator-for ::some-object
+            :problem-transformer
+            (fn [problem]
+              (merge
+                (select-keys problem [:subject :field :requirements])
+                {:type    :validation-failure
+                 :problem (:type problem)})))]
+      (is (= (calculate-problems target)
+            [{:type         :validation-failure
+              :subject      :some-object
+              :field        [:some-number]
+              :problem      :invalid
+              :requirements [:must-be-a-number]}])))))
