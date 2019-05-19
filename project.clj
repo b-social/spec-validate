@@ -3,6 +3,11 @@
   :url "https://github.com/b-social/spec-validate"
   :license {:name "The MIT License"
             :url  "https://opensource.org/licenses/MIT"}
+  :dependencies [[valip "0.2.0"]
+                 [clj-time "0.15.1"]
+                 [clojurewerkz/money "1.10.0"]
+                 [org.bovinegenius/exploding-fish "0.3.6"]
+                 [com.googlecode.libphonenumber/libphonenumber "8.10.0"]]
   :plugins [[lein-ancient "0.6.15"]
             [lein-changelog "0.3.2"]
             [lein-cloverage "1.0.13"]
