@@ -2,12 +2,16 @@
   (:require
     [clojure.spec.alpha :as spec]))
 
-(defn predicate-details [problem-details]
-  (vec (get (vec problem-details) 2)))
-(defn pred-fn-symbol [problem-details]
-  (get (predicate-details problem-details) 0))
-(defn pred-fn-field [problem-details]
-  (get (predicate-details problem-details) 2))
+(defn- predicate-details [pred]
+  (vec (get (vec pred) 2)))
+(defn- pred-fn-symbol [pred]
+  (get (predicate-details pred) 0))
+(defn- pred-fn-field [pred]
+  (get (predicate-details pred) 2))
+(defn- pred-requirement [pred]
+  (let [pred-meta (meta (eval pred))
+        pred-requirement (:spec-validate/requirement pred-meta)]
+    pred-requirement))
 
 (defn validator-for [spec]
   (fn [validation-target]
@@ -22,13 +26,18 @@
                 is-missing (and
                              (seq? pred)
                              (= 'clojure.core/contains? (pred-fn-symbol pred)))
-                [path-to-field type]
+                [path-to-field type requirement]
                 (if is-missing
-                  [(conj (:in problem) (pred-fn-field pred)) :missing]
-                  [(:in problem) :invalid])]
+                  [(conj (:in problem) (pred-fn-field pred))
+                   :missing
+                   :must-be-present]
+                  [(:in problem)
+                   :invalid
+                   (pred-requirement pred)])]
             (conj accumulator
-              {:type type
-               :subject validation-subject
-               :field   path-to-field})))
+              {:type         type
+               :subject      validation-subject
+               :field        path-to-field
+               :requirements [requirement]})))
         []
         (::spec/problems context)))))
