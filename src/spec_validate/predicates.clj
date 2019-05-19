@@ -26,29 +26,37 @@
     (str "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-"
       "[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$")))
 
-(defn uuid-v4? [value]
+(def uuid-v4?
   "Returns true if the provided value is a string representing a v4 UUID,
   else returns false."
-  (exception->false (boolean (re-matches uuid-v4-regex value))))
+  ^{:spec-validate/requirement :must-be-a-v4-uuid}
+  (fn [value]
+    (exception->false (boolean (re-matches uuid-v4-regex value)))))
 
 ;; URLs
-(defn absolute-url? [value]
+(def absolute-url?
   "Returns true if the provided value is a string representing an absolute URL,
   else returns false."
-  (exception->false (urls/absolute? value)))
+  ^{:spec-validate/requirement :must-be-an-absolute-url}
+  (fn [value]
+    (exception->false (urls/absolute? value))))
 
 ;; strings
 (def ^:private digits-regex #"^\d+$")
 
-(defn content? [value]
+(def content?
   "Returns true if the provided value is a string containing non-whitespace
   characters, else returns false."
-  (exception->false (not (string/blank? value))))
+  ^{:spec-validate/requirement :must-have-non-whitespace-content}
+  (fn [value]
+    (exception->false (not (string/blank? value)))))
 
-(defn digits? [value]
+(def digits?
   "Returns true if the provided value is a string containing only the digits
   0-9, else returns false."
-  (exception->false (boolean (re-matches digits-regex value))))
+  ^{:spec-validate/requirement :must-be-a-string-of-digits}
+  (fn [value]
+    (exception->false (boolean (re-matches digits-regex value)))))
 
 ;; numbers
 (defn- parse-number [value]
@@ -56,58 +64,81 @@
     (.validate (DoubleValidator.) value)
     value))
 
-(defn positive? [value]
+(def positive?
   "Returns true if the provided value is a positive number or a string
   representing a positive number, else returns false."
-  (exception->false ((valip.predicates/gt 0) value)))
+  ^{:spec-validate/requirement :must-be-a-positive-number}
+  (fn [value]
+    (exception->false ((valip.predicates/gt 0) value))))
 
-(defn negative? [value]
+(def negative?
   "Returns true if the provided value is a positive number or a string
   representing a positive number, else returns false."
-  (exception->false ((valip.predicates/lt 0) value)))
+  ^{:spec-validate/requirement :must-be-a-negative-number}
+  (fn [value]
+    (exception->false ((valip.predicates/lt 0) value))))
 
-(defn zero? [value]
+(def zero?
   "Returns true if the provided value is zero or a string representing zero,
   else returns false."
-  (exception->false (clojure.core/zero? (parse-number value))))
+  ^{:spec-validate/requirement :must-be-zero}
+  (fn [value]
+    (exception->false (clojure.core/zero? (parse-number value)))))
 
 ;; collections
-(defn not-empty? [value]
+(def not-empty?
   "Returns true if the provided value has a count of at least 1,
   else returns false."
-  (exception->false (>= (count value) 1)))
+  ^{:spec-validate/requirement :must-not-be-empty}
+  (fn [value]
+    (exception->false (>= (count value) 1))))
 
 (defn length-equal-to? [length]
   "Returns a function that returns true if the provided value has the
   specified length, else returns false."
-  #(exception->false (= (count %) length)))
+  ^{:spec-validate/requirement
+    (keyword (str "must-have-length-equal-to-" length))}
+  (fn [value]
+    (exception->false (= (count value) length))))
 
 (defn length-less-than? [length]
   "Returns a function that returns true if the provided value has a length
   less than the specified length, else returns false."
-  #(exception->false (and (some? %) (< (count %) length))))
+  ^{:spec-validate/requirement
+    (keyword (str "must-have-length-less-than-" length))}
+  (fn [value]
+    (exception->false (and (some? value) (< (count value) length)))))
 
 (defn length-greater-than? [length]
   "Returns a function that returns true if the provided value has a length
   greater than the specified length, else returns false."
-  #(exception->false (and (some? %) (> (count %) length))))
+  ^{:spec-validate/requirement
+    (keyword (str "must-have-length-greater-than-" length))}
+  (fn [value]
+    (exception->false (and (some? value) (> (count value) length)))))
 
 ;; dates
-(defn iso8601-datetime? [value]
+(def iso8601-datetime?
   "Returns true if the provided value is a string representing an ISO8601
   datetime, else returns false."
-  (nil->false (and (datetimes/parse value) true)))
+  ^{:spec-validate/requirement :must-be-an-iso8601-datetime}
+  (fn [value]
+    (nil->false (and (datetimes/parse value) true))))
 
 ;; currency
-(defn currency-amount? [value]
+(def currency-amount?
   "Returns true if the provided value is a string representing a currency
   amount, else returns false."
-  (exception->false (and (money-amounts/parse (str "GBP " value)) true)))
+  ^{:spec-validate/requirement :must-be-a-currency-amount}
+  (fn [value]
+    (exception->false (and (money-amounts/parse (str "GBP " value)) true))))
 
-(defn currency-code? [value]
+(def currency-code?
   "Returns true if the provided value is a string representing a currency
   code, else returns false."
-  (exception->false (and (money-currencies/for-code value) true)))
+  ^{:spec-validate/requirement :must-be-a-currency-code}
+  (fn [value]
+    (exception->false (and (money-currencies/for-code value) true))))
 
 ;; post codes
 (def ^:private postcode-regex
@@ -115,10 +146,12 @@
     (str "^([A-Za-z][A-Ha-hK-Yk-y]?[0-9][A-Za-z0-9]? "
       "[0-9][A-Za-z]{2}|[Gg][Ii][Rr] 0[Aa]{2})$")))
 
-(defn postcode? [value]
+(def postcode?
   "Returns true if the provided value is a string representing a UK postcode,
   else returns false."
-  (exception->false (boolean (re-matches postcode-regex value))))
+  ^{:spec-validate/requirement :must-be-a-uk-postcode}
+  (fn [value]
+    (exception->false (boolean (re-matches postcode-regex value)))))
 
 ;; phone numbers
 (def ^:dynamic *default-phone-number-region-code* "GB")
@@ -132,18 +165,22 @@
     (catch NumberParseException _
       nil)))
 
-(defn phone-number? [value]
+(def phone-number?
   "Returns true if the provided value is a string representing a phone number,
   else returns false. By default, treats phone numbers as being from
   Great Britain, however the default region can be overridden with
   `*default-phone-number-region-code*`."
-  (exception->false
-    (.isValidNumber phone-number-util (string->PhoneNumber value))))
+  ^{:spec-validate/requirement :must-be-a-phone-number}
+  (fn [value]
+    (exception->false
+      (.isValidNumber phone-number-util (string->PhoneNumber value)))))
 
 ;; email address
-(defn email-address? [value]
+(def email-address?
   "Returns true if the email address is valid, based on RFC 2822. Email
   addresses containing quotation marks or square brackets are considered
   invalid, as this syntax is not commonly supported in practise. The domain of
   the email address is not checked for validity."
-  (exception->false (valip-predicates/email-address? value)))
+  ^{:spec-validate/requirement :must-be-an-email-address}
+  (fn [value]
+    (exception->false (valip-predicates/email-address? value))))
