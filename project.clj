@@ -1,4 +1,4 @@
-(defproject spec-validate "0.1.4-SNAPSHOT"
+(defproject b-social/spec-validate "0.1.4-SNAPSHOT"
   :description "A clojure.spec based validation library."
   :url "https://github.com/b-social/spec-validate"
   :license {:name "The MIT License"
@@ -30,4 +30,5 @@
                   ["change" "version" "leiningen.release/bump-version"]
                   ["vcs" "commit"]
                   ["vcs" "tag"]
-                  ["vcs" "push"]])
+                  ["vcs" "push"]]
+  :aliases {"test" ["eftest" ":all"]})
