@@ -1,5 +1,5 @@
 (ns spec-validate.predicates-test
-  (:refer-clojure :exclude [uuid? zero?])
+  (:refer-clojure :exclude [uuid? zero? string?])
   (:require
     [clojure.test :refer :all]
 
@@ -8,6 +8,7 @@
 
              absolute-url?
 
+             string?
              content?
              digits?
 
@@ -80,6 +81,19 @@
       (is (false? (absolute-url? target))))))
 
 ;; strings
+(deftest for-string?
+  (testing "returns true when provided value is a string"
+    (let [target "stuff"]
+      (is (true? (string? target)))))
+
+  (testing "returns false when provided value is not a string"
+    (let [target 35]
+      (is (false? (string? target)))))
+
+  (testing "returns false when provided value is nil"
+    (let [target nil]
+      (is (false? (string? target))))))
+
 (deftest for-content?
   (testing "returns true when provided string has content"
     (let [target "stuff"]

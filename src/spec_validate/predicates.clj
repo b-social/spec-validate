@@ -1,5 +1,5 @@
 (ns spec-validate.predicates
-  (:refer-clojure :exclude [uuid? zero?])
+  (:refer-clojure :exclude [uuid? zero? string?])
   (:require
     [valip.predicates :as valip-predicates]
 
@@ -43,6 +43,12 @@
 
 ;; strings
 (def ^:private digits-regex #"^\d+$")
+
+(def string?
+  "Returns true if the provided value is a string, else returns false."
+  ^{:spec-validate/requirement :must-be-a-string}
+  (fn [value]
+    (clojure.core/string? value)))
 
 (def content?
   "Returns true if the provided value is a string containing non-whitespace
