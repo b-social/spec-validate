@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.7] — 2019-06-14
+
 ## [0.1.6] — 2019-06-14
 
 ## [0.1.5] — 2019-05-23
@@ -41,4 +43,5 @@ Released without _CHANGELOG.md_.
 [0.1.4]: https://github.com/b-social/spec-validate/compare/0.1.3...0.1.4
 [0.1.5]: https://github.com/b-social/spec-validate/compare/0.1.4...0.1.5
 [0.1.6]: https://github.com/b-social/spec-validate/compare/0.1.5...0.1.6
-[Unreleased]: https://github.com/b-social/spec-validate/compare/0.1.6...HEAD
+[0.1.7]: https://github.com/b-social/spec-validate/compare/0.1.6...0.1.7
+[Unreleased]: https://github.com/b-social/spec-validate/compare/0.1.7...HEAD
