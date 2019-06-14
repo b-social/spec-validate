@@ -50,7 +50,7 @@
   (fn [value]
     (clojure.core/string? value)))
 
-(def bool?
+(def boolean?
   "Returns true if the provided value is a boolean, else returns false."
   ^{:spec-validate/requirement :must-be-a-boolean}
   (fn [value]
