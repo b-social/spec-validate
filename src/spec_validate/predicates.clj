@@ -50,6 +50,12 @@
   (fn [value]
     (clojure.core/string? value)))
 
+(def boolean?
+  "Returns true if the provided value is a boolean, else returns false."
+  ^{:spec-validate/requirement :must-be-a-boolean}
+  (fn [value]
+    (clojure.core/boolean? value)))
+
 (def content?
   "Returns true if the provided value is a string containing non-whitespace
   characters, else returns false."
