@@ -9,7 +9,7 @@
              absolute-url?
 
              string?
-             boolean?
+             bool?
              content?
              digits?
 
@@ -96,18 +96,18 @@
       (is (false? (string? target))))))
 
 ;; boolean
-(deftest for-boolean?
+(deftest for-bool?
   (testing "returns true when provided value is a string"
     (let [target true]
-      (is (true? (boolean? target)))))
+      (is (true? (bool? target)))))
 
   (testing "returns false when provided value is not a string"
     (let [target "string"]
-      (is (false? (boolean? target)))))
+      (is (false? (bool? target)))))
 
   (testing "returns false when provided value is nil"
     (let [target nil]
-      (is (false? (boolean? target))))))
+      (is (false? (bool? target))))))
 
 (deftest for-content?
   (testing "returns true when provided string has content"
