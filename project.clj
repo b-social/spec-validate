@@ -1,4 +1,4 @@
-(defproject b-social/spec-validate "0.1.8"
+(defproject b-social/spec-validate "0.1.9-SNAPSHOT"
   :description "A clojure.spec based validation library."
   :url "https://github.com/b-social/spec-validate"
   :license {:name "The MIT License"
