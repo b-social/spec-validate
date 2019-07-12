@@ -76,6 +76,12 @@
     (.validate (DoubleValidator.) value)
     value))
 
+(def integer?
+  "Returns true if the provided value is an integer, else returns false."
+  ^{:spec-validate/requirement :must-be-an-integer}
+  (fn [value]
+    (clojure.core/integer? value)))
+
 (def positive?
   "Returns true if the provided value is a positive number or a string
   representing a positive number, else returns false."

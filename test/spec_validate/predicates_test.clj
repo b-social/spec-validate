@@ -13,6 +13,7 @@
              content?
              digits?
 
+             integer?
              positive?
              negative?
              zero?
@@ -146,6 +147,24 @@
   (testing "returns false when provided value is nil"
     (let [target nil]
       (is (false? (digits? target))))))
+
+;; numbers
+(deftest for-integer?
+  (testing "returns true when provided value is an integer"
+    (let [target 3]
+      (is (true? (integer? target)))))
+
+  (testing "returns false when provided value is a decimal"
+    (let [target 3.14]
+      (is (false? (integer? target)))))
+
+  (testing "returns false when provided value is a string"
+    (let [target "3"]
+      (is (false? (integer? target)))))
+
+  (testing "returns false when provided value is a boolean"
+    (let [target true]
+      (is (false? (integer? target))))))
 
 (deftest for-positive?
   (testing "returns true when provided string represents a positive number"
