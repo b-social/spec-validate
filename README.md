@@ -7,7 +7,7 @@ A clojure.spec based validation library.
 Add the following to your `project.clj` file:
 
 ```clj
-[io.logicblocks/antsy "0.1.9"]
+[b-social/spec-validate "0.1.9"]
 ```
 
 ## Documentation
