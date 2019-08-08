@@ -28,9 +28,10 @@
          (reduce
            (fn [accumulator problem]
              (let [pred (:pred problem)
-                   is-missing (and
-                                (seq? pred)
-                                (= 'clojure.core/contains? (pred-fn-symbol pred)))
+                   is-missing
+                   (and
+                     (seq? pred)
+                     (= 'clojure.core/contains? (pred-fn-symbol pred)))
                    [path-to-field type requirement]
                    (if is-missing
                      [(conj (:in problem) (pred-fn-field pred))

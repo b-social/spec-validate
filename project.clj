@@ -1,34 +1,58 @@
 (defproject b-social/spec-validate "0.1.9-SNAPSHOT"
   :description "A clojure.spec based validation library."
   :url "https://github.com/b-social/spec-validate"
+
   :license {:name "The MIT License"
             :url  "https://opensource.org/licenses/MIT"}
+
   :dependencies [[valip "0.2.0"]
                  [clj-time "0.15.1"]
                  [clojurewerkz/money "1.10.0"]
                  [org.bovinegenius/exploding-fish "0.3.6"]
                  [com.googlecode.libphonenumber/libphonenumber "8.10.0"]]
+
   :plugins [[lein-ancient "0.6.15"]
             [lein-changelog "0.3.2"]
-            [lein-cloverage "1.0.13"]
-            [lein-eftest "0.5.3"]
-            [lein-shell "0.5.0"]]
-  :profiles {:shared {:dependencies [[org.clojure/clojure "1.10.0"]
-                                     [eftest "0.5.3"]]}
+            [lein-cloverage "1.1.1"]
+            [lein-eftest "0.5.8"]
+            [lein-shell "0.5.0"]
+            [lein-codox "0.10.7"]
+            [lein-cljfmt "0.6.4"]]
+
+  :profiles {:shared {:dependencies [[org.clojure/clojure "1.10.1"]
+                                     [eftest "0.5.8"]]}
              :dev    [:shared]
              :test   [:shared]}
+
+  :cloverage
+  {:ns-exclude-regex [#"^user"]}
+
+  :codox
+  {:namespaces  [#"^spec-validate\."]
+   :output-path "docs"
+   :doc-paths   ["docs"]
+   :source-uri  "https://github.com/b-social/spec-validate/blob/{version}/{filepath}#L{line}"}
+
+  :cljfmt {:indents ^:replace {#".*" [[:inner 0]]}}
+
   :eftest {:multithread? false}
-  :repl-options {:init-ns spec-validate.core}
+
   :deploy-repositories {"releases" {:url   "https://repo.clojars.org"
                                     :creds :gpg}}
-  :release-tasks [["shell" "git" "diff" "--exit-code"]
-                  ["change" "version" "leiningen.release/bump-version" "release"]
-                  ["changelog" "release"]
-                  ["vcs" "commit"]
-                  ["vcs" "tag"]
-                  ["deploy"]
-                  ["change" "version" "leiningen.release/bump-version"]
-                  ["vcs" "commit"]
-                  ["vcs" "tag"]
-                  ["vcs" "push"]]
+
+  :release-tasks
+  [["shell" "git" "diff" "--exit-code"]
+   ["change" "version" "leiningen.release/bump-version" "release"]
+   ["codox"]
+   ["changelog" "release"]
+   ["shell" "sed" "-E" "-i" "" "s/\"[0-9]+\\.[0-9]+\\.[0-9]+\"/\"${:version}\"/g" "README.md"]
+   ["shell" "git" "add" "."]
+   ["vcs" "commit"]
+   ["vcs" "tag"]
+   ["deploy"]
+   ["change" "version" "leiningen.release/bump-version"]
+   ["vcs" "commit"]
+   ["vcs" "tag"]
+   ["vcs" "push"]]
+
   :aliases {"test" ["eftest" ":all"]})

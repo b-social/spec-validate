@@ -7,37 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
-
-## [0.1.8] — 2019-07-12
-
-## [0.1.8] — 2019-07-12
-
-## [0.1.7] — 2019-06-14
-
-## [0.1.6] — 2019-06-14
-
-## [0.1.5] — 2019-05-23
-
-## [0.1.4] — 2019-05-22
-
-## [0.1.3] — 2019-05-19
-
-## [0.1.2] — 2019-05-19
-
-## [0.1.1] — 2019-05-19
-
-## [0.1.0] — 2019-05-18
 ### Added
-- _CHANGELOG.md_ created.
+- Generated documentation using codox.
+- Basic README.
 ### Changed
-- Something has been changed.
+- Upgraded leiningen plugins.
 ### Fixed
-- Something has been fixed.
-### Removed
-- Something has been removed.
+- Warnings about shadowed clojure.core refers. 
 
 ## 0.1.0-SNAPSHOT — 2019-05-18
-Released without _CHANGELOG.md_.
+- Initial release
 
 
 [0.1.0]: https://github.com/b-social/spec-validate/compare/0.1.0-SNAPSHOT...0.1.0
