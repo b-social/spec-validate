@@ -1,5 +1,5 @@
 (ns spec-validate.predicates
-  (:refer-clojure :exclude [uuid? zero? string?])
+  (:refer-clojure :exclude [uuid? zero? string? boolean? integer?])
   (:require
     [valip.predicates :as valip-predicates]
 
@@ -50,12 +50,6 @@
   (fn [value]
     (clojure.core/string? value)))
 
-(def boolean?
-  "Returns true if the provided value is a boolean, else returns false."
-  ^{:spec-validate/requirement :must-be-a-boolean}
-  (fn [value]
-    (clojure.core/boolean? value)))
-
 (def content?
   "Returns true if the provided value is a string containing non-whitespace
   characters, else returns false."
@@ -69,6 +63,13 @@
   ^{:spec-validate/requirement :must-be-a-string-of-digits}
   (fn [value]
     (exception->false (boolean (re-matches digits-regex value)))))
+
+;; boolean
+(def boolean?
+  "Returns true if the provided value is a boolean, else returns false."
+  ^{:spec-validate/requirement :must-be-a-boolean}
+  (fn [value]
+    (clojure.core/boolean? value)))
 
 ;; numbers
 (defn- parse-number [value]
