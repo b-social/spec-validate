@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.10] — 2022-07-05
+
 ## [0.1.9] — 2019-08-08
 ### Added
 - Generated documentation using codox.
@@ -32,4 +34,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [0.1.8]: https://github.com/b-social/spec-validate/compare/0.1.7...0.1.8
 [0.1.8]: https://github.com/b-social/spec-validate/compare/0.1.8...0.1.8
 [0.1.9]: https://github.com/b-social/spec-validate/compare/0.1.8...0.1.9
-[Unreleased]: https://github.com/b-social/spec-validate/compare/0.1.9...HEAD
+[0.1.10]: https://github.com/b-social/spec-validate/compare/0.1.9...0.1.10
+[Unreleased]: https://github.com/b-social/spec-validate/compare/0.1.10...HEAD
