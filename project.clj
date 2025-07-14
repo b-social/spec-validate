@@ -5,7 +5,7 @@
   :license {:name "The MIT License"
             :url  "https://opensource.org/licenses/MIT"}
 
-  :dependencies [[valip "0.2.0"]
+  :dependencies [[commons-validator "1.10.0"]
                  [clj-time "0.15.1"]
                  [clojurewerkz/money "1.10.0"]
                  [org.bovinegenius/exploding-fish "0.3.6"]

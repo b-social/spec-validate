@@ -1,13 +1,9 @@
 (ns spec-validate.predicates
   (:refer-clojure :exclude [uuid? zero? string? boolean? integer?])
   (:require
-    [valip.predicates :as valip-predicates]
-
     [clojurewerkz.money.amounts :as money-amounts]
     [clojurewerkz.money.currencies :as money-currencies]
-
     [org.bovinegenius.exploding-fish :as urls]
-
     [clj-time.format :as datetimes]
     [clojure.string :as string])
   (:import
@@ -88,14 +84,14 @@
   representing a positive number, else returns false."
   ^{:spec-validate/requirement :must-be-a-positive-number}
   (fn [value]
-    (exception->false ((valip.predicates/gt 0) value))))
+    (exception->false ((fn [x] (> (parse-number x) 0)) value))))
 
 (def negative?
   "Returns true if the provided value is a positive number or a string
   representing a positive number, else returns false."
   ^{:spec-validate/requirement :must-be-a-negative-number}
   (fn [value]
-    (exception->false ((valip.predicates/lt 0) value))))
+    (exception->false ((fn [x] (< (parse-number x) 0)) value))))
 
 (def zero?
   "Returns true if the provided value is zero or a string representing zero,
@@ -227,6 +223,14 @@
     (exception->false
       (.isValidNumber phone-number-util (string->PhoneNumber value)))))
 
+(defn- email-address-pred
+  [email]
+  (let [re (str "(?i)[a-z0-9!#$%&'*+/=?^_`{|}~-]+"
+             "(?:\\.[a-z0-9!#$%&'*+/=?" "^_`{|}~-]+)*"
+             "@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+"
+             "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]
+    (boolean (re-matches (re-pattern re) email))))
+
 ;; email address
 (def email-address?
   "Returns true if the email address is valid, based on RFC 2822. Email
@@ -235,4 +239,4 @@
   the email address is not checked for validity."
   ^{:spec-validate/requirement :must-be-an-email-address}
   (fn [value]
-    (exception->false (valip-predicates/email-address? value))))
+    (exception->false (email-address-pred value))))
