@@ -7,7 +7,7 @@ A clojure.spec based validation library.
 Add the following to your `project.clj` file:
 
 ```clj
-[b-social/spec-validate "0.1.10"]
+[b-social/spec-validate "0.1.11"]
 ```
 
 ## Documentation
