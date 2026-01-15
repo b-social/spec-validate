@@ -1,4 +1,4 @@
-(defproject b-social/spec-validate "0.1.12"
+(defproject b-social/spec-validate "0.1.13-SNAPSHOT"
   :description "A clojure.spec based validation library."
   :url "https://github.com/b-social/spec-validate"
 
