@@ -19,7 +19,7 @@
             [lein-codox "0.10.7"]
             [lein-cljfmt "0.6.4"]]
 
-  :profiles {:shared {:dependencies [[org.clojure/clojure "1.12.4"]
+  :profiles {:shared {:dependencies [[org.clojure/clojure "1.11.2"]
                                      [eftest "0.5.8"]]}
              :dev    [:shared]
              :test   [:shared]}
