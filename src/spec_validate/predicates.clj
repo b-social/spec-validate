@@ -29,6 +29,13 @@
   (fn [value]
     (exception->false (boolean (re-matches uuid-v4-regex value)))))
 
+(def uuid?
+  "Returns true if the provided value is a string representing a UUID,
+  else returns false"
+  ^{:spec-validate/requirement :must-be-a-uuid}
+  (fn [value]
+    (exception->false (boolean (parse-uuid value)))))
+
 ;; URLs
 (def absolute-url?
   "Returns true if the provided value is a string representing an absolute URL,

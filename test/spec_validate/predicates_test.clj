@@ -5,6 +5,7 @@
 
     [spec-validate.predicates
      :refer [uuid-v4?
+             uuid?
 
              absolute-url?
 
@@ -59,6 +60,25 @@
   (testing "returns false when provided value is nil"
     (let [target nil]
       (is (false? (uuid-v4? target))))))
+
+(deftest for-uuid?
+  (testing "returns true when provided string represents a lower case UUID"
+    (is (true? (uuid? "2571f835-bb47-4637-a0ed-dbfc82583f7d"))))
+
+  (testing "returns true when provided string represents an upper case UUID"
+    (is (true? (uuid? "2571F835-BB47-4637-A0ED-DBFC82583F7D"))))
+
+  (testing "returns true when provided represents a non-v4 UUID"
+    (is (true? (uuid? "019bc15d-a06c-7f49-a0c3-3f1333cc8cf4"))))
+
+  (testing "returns false when provided string is not a UUID"
+    (is (false? (uuid? "the quick brown fox"))))
+
+  (testing "returns false when provided value is not a string"
+    (is (false? (uuid? 25))))
+
+  (testing "returns false when provided value is nil"
+    (is (false? (uuid? nil)))))
 
 ;; URLs
 (deftest for-absolute-url?
