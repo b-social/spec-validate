@@ -14,9 +14,14 @@ Add the following to your `project.clj` file:
 
 * [API Docs](http://b-social.github.io/spec-validate)
 
-## Usage
+## Deploy
 
-TODO: Add usage.
+Get a deploy token from Clojars and then:
+```
+export CLOJARS_USERNAME=<username>
+export CLOJARS_PASSWORD=<deploy-token>
+lein release
+```
 
 ## License
 

@@ -37,8 +37,10 @@
 
   :eftest {:multithread? false}
 
-  :deploy-repositories {"releases" {:url   "https://repo.clojars.org"
-                                    :creds :gpg}}
+  :deploy-repositories
+  {"releases" {:url "https://repo.clojars.org"
+               :username :env/clojars_username
+               :password :env/clojars_password}}
 
   :release-tasks
   [["shell" "git" "diff" "--exit-code"]
