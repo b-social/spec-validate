@@ -9,7 +9,7 @@
                  [clj-time "0.15.1"]
                  [clojurewerkz/money "1.10.0"]
                  [org.bovinegenius/exploding-fish "0.3.6"]
-                 [com.googlecode.libphonenumber/libphonenumber "8.12.51"]]
+                 [com.googlecode.libphonenumber/libphonenumber "9.0.36"]]
 
   :plugins [[lein-ancient "0.6.15"]
             [lein-changelog "0.3.2"]
